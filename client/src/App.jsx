@@ -6,36 +6,72 @@ import ChatBar from './ChatBar.jsx';
 class App extends Component {
   constructor(props){
     super(props);
+
     this.state = {
       loading: true,
-      currentUser: {name: "Bob"}
+      currentUser: {name: "Bob"},
+      messages: []
     };
+
+    //create a new socket connection
+    const socket = new WebSocket('ws://localhost:3001/');
+
+    socket.onopen = () => {
+      console.log('connection to server open');
+    };
+
+    socket.onmessage = e => {
+      var message = JSON.parse(e.data);
+      let newMessages = [];
+
+      switch(message.type){
+        case 'singleMessage':
+          newMessages = [...this.state.messages, message.data];
+          break;
+        case 'multiMessages':
+          newMessages = [...this.state.messages, ...message.data];
+          break;
+      }
+
+      this.setState( { messages: newMessages, loading: false });
+    };
+
+    socket.onclose = () => {
+      console.log('close');
+    };
+
+    this.socket = socket;
+
     this.addMessage = this.addMessage.bind(this);
   }
 
   addMessage(message){
-    const messages = [...this.state.messages, message];
-    this.setState({ messages });
+    const messageStr = JSON.stringify(message);
+    this.socket.send(messageStr);
+
+    // const messages = [...this.state.messages, message];
+    // this.setState({ messages });
   }
 
   // in App.jsx
   componentDidMount() {
-    setTimeout(() => {
 
-      const messages = [
-        {
-          id: 'M0000000000001',
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 'M0000000000002',
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ];
-      this.setState({ messages, loading: false })
-    }, 3000);
+    // setTimeout(() => {
+
+    //   const messages = [
+    //     {
+    //       id: 'M0000000000001',
+    //       username: "Bob",
+    //       content: "Has anyone seen my marbles?",
+    //     },
+    //     {
+    //       id: 'M0000000000002',
+    //       username: "Anonymous",
+    //       content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+    //     }
+    //   ];
+    //   this.setState({ messages, loading: false })
+    // }, 3000);
   }
 
 

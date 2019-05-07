@@ -20,7 +20,9 @@ Install the dependencies and start the server.
 ```
 npm install
 npm start
-open http://localhost:3000
+
+Chatty React App: http://localhost:3000
+Chatty WebSockets Server: http://localhost:3001
 ```
 
 ### Static Files

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { generateRandomId } from '../utils/index.js';
 
 class ChatBar extends Component {
   constructor(props){
@@ -16,7 +15,6 @@ class ChatBar extends Component {
         case 'message':
 
           const message = {
-            id: generateRandomId(),
             username: this.props.currentUser.name,
             content: e.target.value
           };
