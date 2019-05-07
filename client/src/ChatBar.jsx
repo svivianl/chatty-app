@@ -10,8 +10,13 @@ class ChatBar extends Component {
       // debugger;
     if(e.charCode === 13){
       switch(e.target.name){
-        // case 'username':
-        //   break;
+        case 'username':
+          const user ={
+            name: e.target.value
+          };
+          this.props.changeUser(user);
+          break;
+
         case 'message':
 
           const message = {
@@ -28,8 +33,17 @@ class ChatBar extends Component {
   render() {
     return (
       <footer className="chatbar">
-        <input className="chatbar-username" placeholder="Your Name (Optional)" defaultValue={this.props.currentUser.name} name='username'/>
-        <input className="chatbar-message" placeholder="Type a message and hit ENTER" name='message' onKeyPress={this.onKeyPress}/>
+        <input className="chatbar-username"
+                placeholder="Your Name (Optional)"
+                defaultValue={this.props.currentUser.name}
+                name='username'
+                onKeyPress={this.onKeyPress}
+        />
+        <input className="chatbar-message"
+                placeholder="Type a message and hit ENTER"
+                name='message'
+                onKeyPress={this.onKeyPress}
+        />
       </footer>
     );
   }

@@ -43,14 +43,16 @@ class App extends Component {
     this.socket = socket;
 
     this.addMessage = this.addMessage.bind(this);
+    this.changeUser = this.changeUser.bind(this);
   }
 
   addMessage(message){
     const messageStr = JSON.stringify(message);
     this.socket.send(messageStr);
+  }
 
-    // const messages = [...this.state.messages, message];
-    // this.setState({ messages });
+  changeUser(user){
+    this.setState({ currentUser: user });
   }
 
   // in App.jsx
@@ -84,7 +86,10 @@ class App extends Component {
       <div>
         <NavBar/>
         {main}
-        <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage}/>
+        <ChatBar currentUser={this.state.currentUser}
+                 addMessage={this.addMessage}
+                 changeUser={this.changeUser}
+        />
       </div>
     );
   }
