@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import NavBar from './NavBar.jsx';
-import Main from './Main.jsx';
+import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
 class App extends Component {
@@ -80,7 +80,7 @@ class App extends Component {
   render() {
     let  main = null;
 
-    if(!this.state.loading) main = <Main messages={this.state.messages}/>;
+    if(!this.state.loading) main = <MessageList messages={this.state.messages}/>;
 
     return (
       <div>
