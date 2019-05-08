@@ -18,12 +18,20 @@ class App extends Component {
   }
 
   addMessage(message){
-    const messageStr = JSON.stringify(message);
+    message['type'] = 'postMessage';
+    const messageStr = JSON.stringify({ data: message });
     this.socket.send(messageStr);
   }
 
   changeUser(user){
+    const message = {
+      type: 'postNotification',
+      content: `${this.state.currentUser.name} has changed their name to ${user.name}`
+    }
+
     this.setState({ currentUser: user });
+    const messageStr = JSON.stringify({ data: message });
+    this.socket.send(messageStr);
   }
 
   // in App.jsx
@@ -36,18 +44,9 @@ class App extends Component {
     };
 
     this.socket.onmessage = e => {
-      var message = JSON.parse(e.data);
+      const { data } = JSON.parse(e.data);
       let newMessages = [];
-
-      switch(message.type){
-        case 'singleMessage':
-          newMessages = [...this.state.messages, message.data];
-          break;
-        case 'multiMessages':
-          newMessages = [...this.state.messages, ...message.data];
-          break;
-      }
-
+      Array.isArray(data) ? newMessages = [...this.state.messages, ...data] : newMessages = [...this.state.messages, data];
       this.setState( { messages: newMessages, loading: false });
     };
 

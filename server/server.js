@@ -1,14 +1,16 @@
 const messages = [
-    {
-      id: 'M0000000000001',
-      username: "Bob",
-      content: "Has anyone seen my marbles?",
-    },
-    {
-      id: 'M0000000000002',
-      username: "Anonymous",
-      content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-    }
+    // {
+    //   id: 'M0000000000001',
+    //   type: "incomingMessage",
+    //   username: "Bob",
+    //   content: "Has anyone seen my marbles?",
+    // },
+    // {
+    //   id: 'M0000000000002',
+    //   type: "incomingMessage",
+    //   username: "Anonymous",
+    //   content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+    // }
   ];
 
 const express       = require('express');
@@ -43,18 +45,29 @@ wss.broadcast = function broadcast(data) {
 wss.on('connection', (ws, req) => {
   console.log('Client connected');
 
-  wss.broadcast(JSON.stringify({type: 'multiMessages', data: messages}));
+  wss.broadcast(JSON.stringify({ data: messages }));
   // const ip = req.connection.remoteAddress;
 
   ws.on('open', function open() {
-    ws.send(JSON.stringify({type: 'multiMessages', data: messages}));
+    ws.send(JSON.stringify({ data: messages }));
   });
 
   ws.on('message', function incoming(message) {
-    const jsonData = JSON.parse(message)
-    jsonData['id'] = uuidv1();
-    messages.push(jsonData);
-    wss.broadcast(JSON.stringify({type: 'singleMessage', data:jsonData}));
+
+    const { data } = JSON.parse(message);
+
+    switch(data.type){
+      case 'postMessage':
+        data.type = 'incomingMessage';
+        break;
+      case 'postNotification':
+        data.type = 'incomingNotification';
+        break;
+    }
+
+    data['id'] = uuidv1();
+    messages.push(data);
+    wss.broadcast(JSON.stringify({ data }));
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.

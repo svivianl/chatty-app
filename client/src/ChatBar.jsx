@@ -7,7 +7,6 @@ class ChatBar extends Component {
   }
 
   onKeyPress(e){
-      // debugger;
     if(e.charCode === 13){
       switch(e.target.name){
         case 'username':
