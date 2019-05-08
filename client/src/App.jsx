@@ -15,6 +15,7 @@ class App extends Component {
 
     this.addMessage = this.addMessage.bind(this);
     this.changeUser = this.changeUser.bind(this);
+    this.numberOfUsers = 1;
   }
 
   addMessage(message){
@@ -44,10 +45,17 @@ class App extends Component {
     };
 
     this.socket.onmessage = e => {
-      const { data } = JSON.parse(e.data);
-      let newMessages = [];
-      Array.isArray(data) ? newMessages = [...this.state.messages, ...data] : newMessages = [...this.state.messages, data];
-      this.setState( { messages: newMessages, loading: false });
+      const { type, data } = JSON.parse(e.data);
+      switch(type){
+        case 'message':
+          let newMessages = [];
+          Array.isArray(data) ? newMessages = [...this.state.messages, ...data] : newMessages = [...this.state.messages, data];
+          this.setState( { messages: newMessages, loading: false });
+          break;
+        case 'system':
+          this.setState({ numberOfUsers: data });
+          break;
+      }
     };
 
     this.socket.onclose = () => {
@@ -63,7 +71,7 @@ class App extends Component {
 
     return (
       <div>
-        <NavBar/>
+        <NavBar numberOfUsers={this.state.numberOfUsers}/>
         {main}
         <ChatBar currentUser={this.state.currentUser}
                  addMessage={this.addMessage}

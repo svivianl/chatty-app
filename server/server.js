@@ -44,12 +44,12 @@ wss.broadcast = function broadcast(data) {
 // the ws parameter in the callback.
 wss.on('connection', (ws, req) => {
   console.log('Client connected');
-
-  wss.broadcast(JSON.stringify({ data: messages }));
+  console.log('wss.clients connect',wss.clients.size);
+  wss.broadcast(JSON.stringify({ type: 'system', data: wss.clients.size }));
   // const ip = req.connection.remoteAddress;
 
   ws.on('open', function open() {
-    ws.send(JSON.stringify({ data: messages }));
+    ws.send(JSON.stringify({ type: 'message', data: messages }));
   });
 
   ws.on('message', function incoming(message) {
@@ -67,9 +67,13 @@ wss.on('connection', (ws, req) => {
 
     data['id'] = uuidv1();
     messages.push(data);
-    wss.broadcast(JSON.stringify({ data }));
+    wss.broadcast(JSON.stringify({ type: 'message', data }));
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    console.log('wss.clients close', wss.clients.size);
+    wss.broadcast(JSON.stringify({ type: 'system', data: wss.clients.size }));
+  });
 });
