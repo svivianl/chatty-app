@@ -9,7 +9,7 @@ class App extends Component {
 
     this.state = {
       loading: true,
-      currentUser: {name: "Bob"},
+      currentUser: {name: ''},
       messages: []
     };
 
