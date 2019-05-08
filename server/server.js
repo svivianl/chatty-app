@@ -78,9 +78,9 @@ wss.on('connection', (ws, req) => {
 
   // const ip = req.connection.remoteAddress;
 
-  ws.on('open', function open() {
-    ws.send(JSON.stringify({ type: 'message', data: messages }));
-  });
+  // ws.on('open', function open() {
+  //   ws.send(JSON.stringify({ type: 'message', data: messages }));
+  // });
 
   ws.on('message', function incoming(message) {
 
@@ -88,10 +88,23 @@ wss.on('connection', (ws, req) => {
 
     switch(data.type){
       case 'postMessage':
-        data.type = 'incomingMessage';
-        data['id'] = uuidv1();
-        messages.push(data);
-        wss.broadcast(JSON.stringify({ type: 'message', data }));
+        const newMessages = [];
+        // data.type = 'incomingMessage';
+        data.messages.forEach(message => {
+          message['id'] = uuidv1();
+          switch(message.type){
+            case 'postMessage':
+              message.type = 'incomingMessage';
+              break;
+            case 'postMessageImg':
+              message.type = 'incomingMessageImg';
+              break;
+          }
+          // console.log(message);
+          messages.push(message);
+          newMessages.push(message);
+        });
+        wss.broadcast(JSON.stringify({ type: 'message', data: newMessages }));
         break;
 
       case 'postNotification':

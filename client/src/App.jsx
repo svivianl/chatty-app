@@ -14,13 +14,19 @@ class App extends Component {
       numberOfUsers: 1
     };
 
-    this.addMessage = this.addMessage.bind(this);
+    this.addMessages = this.addMessages.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
 
-  addMessage(message){
-    message['type'] = 'postMessage';
-    const messageStr = JSON.stringify({ data: message });
+  addMessages(messages){
+    // messages.map(message => message['type'] = 'postMessage');
+    // messages['type'] = 'postMessage';
+    const messageStr = JSON.stringify({
+      data: {
+        type: 'postMessage',
+        messages
+      }
+    });
     this.socket.send(messageStr);
   }
 
@@ -85,7 +91,7 @@ class App extends Component {
           break;
 
         case 'message':
-          let newMessages = [...this.state.messages, data];
+          let newMessages = [...this.state.messages, ...data];
           this.setState( { messages: newMessages, loading: false });
           break;
 
@@ -102,7 +108,7 @@ class App extends Component {
 
         default:
           // show an error in the console if the message type is unknown
-          throw new Error("Unknown event type " + type);
+          throw new Error('Unknown event type ' + type);
       }
     };
 
@@ -122,7 +128,7 @@ class App extends Component {
         <NavBar numberOfUsers={this.state.numberOfUsers}/>
         {main}
         <ChatBar currentUser={this.state.currentUser}
-                 addMessage={this.addMessage}
+                 addMessages={this.addMessages}
                  changeUser={this.changeUser}
         />
       </div>

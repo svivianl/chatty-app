@@ -1,27 +1,48 @@
 import React, {Component} from 'react';
 
+const UserName = ({ users, message }) => {
+  if(message.hasOwnProperty('username')){
+    const user = users.filter(user => (user.name.includes(message.username) ) ? true : false );
+    const style = { color: user[0].color };
+
+    return(<span className="message-username" style={style}>{message.username}</span>);
+  }
+  return undefined;
+};
+
 class Message extends Component {
   render() {
 
-    let message = null;
-    if(this.props.message.type === 'incomingMessage') {
-
-      const user = this.props.users.filter(user => (user.name.includes(this.props.message.username) ) ? true : false );
-      const style = { color: user[0].color };
-
-      return (
-        <div className="message">
-          <span className="message-username" style={style}>{this.props.message.username}</span>
-          <span className="message-content">{this.props.message.content}</span>
-        </div>
+    const username = this.props.message.username && (
+      <UserName users={this.props.users} message={this.props.message}/>
       );
 
-    }else{
-      return (
-        <div className="notification">
-          <span className="notification-content">{this.props.message.content}</span>
-        </div>
-      );
+    switch(this.props.message.type){
+      case 'incomingMessage':
+        return (
+          <div className="message">
+            {username}
+            <span className="message-content">{this.props.message.content}</span>
+          </div>
+        );
+        break;
+
+      case 'incomingMessageImg':
+        return (
+          <div className="message">
+            {username}
+            <img className="message-content" src={this.props.message.content}/>
+          </div>
+        );
+        break;
+
+      case 'incomingNotification':
+        return (
+          <div className="notification">
+            <span className="notification-content">{this.props.message.content}</span>
+          </div>
+        );
+        break;
     }
   }
 }
