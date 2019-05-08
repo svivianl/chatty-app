@@ -8,14 +8,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-      loading: true,
-      currentUser: {name: ''},
-      messages: []
+      currentUser: {name:'Anonymous'},
+      messages: [],
+      users: [],
+      numberOfUsers: 1
     };
 
     this.addMessage = this.addMessage.bind(this);
     this.changeUser = this.changeUser.bind(this);
-    this.numberOfUsers = 1;
   }
 
   addMessage(message){
@@ -25,13 +25,19 @@ class App extends Component {
   }
 
   changeUser(user){
-    const message = {
+    let name = '';
+    if(this.state.currentUser.name.length !== 0) {
+      name = this.state.currentUser.name[this.state.currentUser.name.length - 1];
+    }
+
+    const data = {
       type: 'postNotification',
-      content: `${this.state.currentUser.name} has changed their name to ${user.name}`
+      content: `${name} has changed their name to ${user.name}`,
+      currentUser: user
     }
 
     this.setState({ currentUser: user });
-    const messageStr = JSON.stringify({ data: message });
+    const messageStr = JSON.stringify({ data });
     this.socket.send(messageStr);
   }
 
@@ -40,21 +46,63 @@ class App extends Component {
     //create a new socket connection
     this.socket = new WebSocket('ws://localhost:3001/');
 
-    this.socket.onopen = () => {
+    this.socket.onopen = (e) => {
       console.log('connection to server open');
     };
 
     this.socket.onmessage = e => {
+
       const { type, data } = JSON.parse(e.data);
+
       switch(type){
+        case 'init':
+          const currentUser = {
+            id: data.currentUser.id,
+            name: data.currentUser.name
+          }
+
+          let loading = true;
+          if(data.messages.length !== 0) loading = false;
+
+          this.setState({
+            currentUser: currentUser,
+            users: data.users,
+            numberOfUsers: data.numberOfUsers,
+            messages: [...this.state.messages, ...data.messages],
+            loading
+          });
+          break;
+
+        case 'changeUser':
+          this.setState({ currentUser: data.currentUser });
+          break;
+
+        case 'addUser':
+          this.setState({
+            users: [...this.state.users, data.user],
+            numberOfUsers: data.numberOfUsers
+          });
+          break;
+
         case 'message':
-          let newMessages = [];
-          Array.isArray(data) ? newMessages = [...this.state.messages, ...data] : newMessages = [...this.state.messages, data];
+          let newMessages = [...this.state.messages, data];
           this.setState( { messages: newMessages, loading: false });
           break;
-        case 'system':
-          this.setState({ numberOfUsers: data });
+
+        case 'notification':
+          this.setState({
+            users: [...data.users],
+            messages: [...this.state.messages, data.message],
+          });
           break;
+
+        case 'clientsSize':
+          this.setState({ numberOfUsers: data.numberOfUsers });
+          break;
+
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error("Unknown event type " + type);
       }
     };
 
@@ -67,7 +115,7 @@ class App extends Component {
   render() {
     let  main = null;
 
-    if(!this.state.loading) main = <MessageList messages={this.state.messages}/>;
+    if(this.state.messages.length !== 0) main = <MessageList users={this.state.users} messages={this.state.messages}/>;
 
     return (
       <div>

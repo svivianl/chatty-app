@@ -11,15 +11,16 @@ class ChatBar extends Component {
       switch(e.target.name){
         case 'username':
           const user ={
-            name: e.target.value
+            id: this.props.currentUser.id,
+            name:  e.target.value
           };
           this.props.changeUser(user);
           break;
 
         case 'message':
-
+          const username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
           const message = {
-            username: this.props.currentUser.name,
+            username,
             content: e.target.value
           };
           this.props.addMessage(message);
@@ -30,11 +31,13 @@ class ChatBar extends Component {
   }
 
   render() {
+    let username = this.props.currentUser.name;
+    if(this.props.currentUser.name !== undefined && Array.isArray(this.props.currentUser.name) && this.props.currentUser.name.length > 0) username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
     return (
       <footer className="chatbar">
         <input className="chatbar-username"
                 placeholder="Your Name (Optional)"
-                defaultValue={this.props.currentUser.name}
+                defaultValue={username}
                 name='username'
                 onKeyPress={this.onKeyPress}
         />
