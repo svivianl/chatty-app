@@ -13,35 +13,6 @@ class App extends Component {
       messages: []
     };
 
-    //create a new socket connection
-    const socket = new WebSocket('ws://localhost:3001/');
-
-    socket.onopen = () => {
-      console.log('connection to server open');
-    };
-
-    socket.onmessage = e => {
-      var message = JSON.parse(e.data);
-      let newMessages = [];
-
-      switch(message.type){
-        case 'singleMessage':
-          newMessages = [...this.state.messages, message.data];
-          break;
-        case 'multiMessages':
-          newMessages = [...this.state.messages, ...message.data];
-          break;
-      }
-
-      this.setState( { messages: newMessages, loading: false });
-    };
-
-    socket.onclose = () => {
-      console.log('close');
-    };
-
-    this.socket = socket;
-
     this.addMessage = this.addMessage.bind(this);
     this.changeUser = this.changeUser.bind(this);
   }
@@ -57,23 +28,32 @@ class App extends Component {
 
   // in App.jsx
   componentDidMount() {
+    //create a new socket connection
+    this.socket = new WebSocket('ws://localhost:3001/');
 
-    // setTimeout(() => {
+    this.socket.onopen = () => {
+      console.log('connection to server open');
+    };
 
-    //   const messages = [
-    //     {
-    //       id: 'M0000000000001',
-    //       username: "Bob",
-    //       content: "Has anyone seen my marbles?",
-    //     },
-    //     {
-    //       id: 'M0000000000002',
-    //       username: "Anonymous",
-    //       content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-    //     }
-    //   ];
-    //   this.setState({ messages, loading: false })
-    // }, 3000);
+    this.socket.onmessage = e => {
+      var message = JSON.parse(e.data);
+      let newMessages = [];
+
+      switch(message.type){
+        case 'singleMessage':
+          newMessages = [...this.state.messages, message.data];
+          break;
+        case 'multiMessages':
+          newMessages = [...this.state.messages, ...message.data];
+          break;
+      }
+
+      this.setState( { messages: newMessages, loading: false });
+    };
+
+    this.socket.onclose = () => {
+      console.log('close');
+    };
   }
 
 
