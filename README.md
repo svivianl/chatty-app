@@ -1,51 +1,49 @@
-React Boilerplate
-=====================
+# Chatty Project
 
-A minimal and light dev environment for ReactJS.
+Chatty is a simple, single-page Chat page built using:
 
-### Usage
+**Front-end:**
+* HTML, CSS, React
+**Back-end:**
+* Node, Express and WebSockets
 
-Clone the boilerplate and create your own git repo.
+## Final Product
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+### Dependencies
+
+#### Client
+* React
+* react-dom
+* Webpack
+* [babel-loader](https://github.com/babel/babel-loader)
+* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+
+#### Server
+* express
+* uuid
+* ws
+
+### Getting Started
 
 Install the dependencies and start the server.
 
 ```
 npm install
 npm start
-
-Chatty React App: http://localhost:3000
+```
 Chatty WebSockets Server: http://localhost:3001
-```
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
+Install the dependencies and start the client.
 
 ```
-npm run lint
+npm install
+npm start
 ```
+Chatty React App: http://localhost:3000
 
-### Dependencies
+## Known issues
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* You **must** change username Anonymous for another one before starting
+* You can have only 4 people using the chat page because there are only 4 colours to assign to each user.
 
-
-
-#### You **must** change username Anonymous for another one before starting
+https://i.ytimg.com/vi/YCaGYUIfdy4/maxresdefault.jpg
