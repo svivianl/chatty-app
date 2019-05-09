@@ -54,16 +54,6 @@ class ChatBar extends Component {
                   break;
               }
 
-              // if(begin === 0){
-              //   let url = text.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/i);
-              //   message['type'] = 'postMessageImg';
-              //   message['content'] = url[0];
-              //   text = text.substr(message.content.length);
-              // }else{
-              //   message['type'] = 'postMessage';
-              //   message['content'] = text.substr(0, begin - 1);
-              //   text = text.substr(begin);
-              // }
               messages.push(message);
             }
 

@@ -38,6 +38,21 @@ body {
 .message {
   display: flex;
   padding: 5px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    max-width: 60vw;
+    img{
+      width: 100%;
+    }
+  }
+}
+
+.message-img{
+  justify-content: center;
+  align-items: center;
 }
 
 .message.system {
@@ -58,16 +73,10 @@ body {
   flex-direction: column;
 }
 
-img.message-content {
-  flex: 8;
-  display: flex;
-  flex-direction: column;
-  max-width: 60%;
-}
-
 .message-username {
   flex: 2;
   font-weight: 700;
+  max-width: 15%;
 }
 
 .navbar {
