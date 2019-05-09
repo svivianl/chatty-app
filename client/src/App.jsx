@@ -19,8 +19,6 @@ class App extends Component {
   }
 
   addMessages(messages){
-    // messages.map(message => message['type'] = 'postMessage');
-    // messages['type'] = 'postMessage';
     const messageStr = JSON.stringify({
       data: {
         type: 'postMessage',

@@ -16,13 +16,13 @@ const server = express()
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 //====================================================================
+// DB
+//====================================================================
+const { messages, users } = require( './model/index.js' );
+
+//====================================================================
 // Variables
 //====================================================================
-
-// Array with the messages
-const messages = [];
-// Array with the users
-const users = [];
 
 // Array with some colors
 var colors = [ 'red', 'green', 'blue', 'magenta' ];
@@ -100,7 +100,6 @@ wss.on('connection', (ws, req) => {
               message.type = 'incomingMessageImg';
               break;
           }
-          // console.log(message);
           messages.push(message);
           newMessages.push(message);
         });
@@ -136,5 +135,11 @@ wss.on('connection', (ws, req) => {
       numberOfUsers:  wss.clients.size
     }
     wss.broadcast(JSON.stringify({ type: 'clientsSize', data }));
+
+    // clear global variables
+    if(wss.clients.size === 0){
+      messages.length = 0;
+      users.length = 0;
+    }
   });
 });
