@@ -31,9 +31,8 @@ const MessageTag = ({ users, message }) => {
   }else{
     return (
       <div className="message">
-        <div className="message-img">
-          <span className="message-content">{message.content}</span>
-        </div>
+        <span className="message-username"></span>
+        <span className="message-content">{message.content}</span>
       </div>
     );
   }
@@ -53,8 +52,9 @@ const MessageImg = ({ users, message }) => {
     );
   }else{
     return (
-      <div className="message message-img">
-        <div>
+      <div className="message">
+        <span className="message-username"></span>
+        <div className="message-img">
           <img className="message-content" src={message.content}/>
         </div>
       </div>
