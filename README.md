@@ -11,6 +11,8 @@ Chatty is a simple, single-page Chat page built using:
 
 ![Image of Main Chat](./img/main.png)
 
+Sending images
+
 ![Image of Sending Images Page](./img/images.png)
 
 
