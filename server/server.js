@@ -128,7 +128,7 @@ wss.on('connection', (ws, req) => {
     wss.broadcast(JSON.stringify({ type: 'clientsSize', data }));
 
     // clear global variables
-    if(wss.clients.size === 0){
+    if(!wss.clients.size){
       messages.length = 0;
       users.length = 0;
     }

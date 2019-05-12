@@ -15,7 +15,9 @@ class ChatBar extends Component {
 
   getUserName(){
     let username = this.props.currentUser.name;
-    if(this.props.currentUser.name && Array.isArray(this.props.currentUser.name) && this.props.currentUser.name.length) username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
+    if(this.props.currentUser.name && Array.isArray(this.props.currentUser.name) && this.props.currentUser.name.length){
+      username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
+    }
     return username;
   }
 
@@ -41,7 +43,7 @@ class ChatBar extends Component {
         let begin = text.indexOf('http');
         const message = {};
 
-        if(messages.length === 0) message['username'] = username;
+        if(!messages.length) message['username'] = username;
 
         switch(begin){
           case -1:
