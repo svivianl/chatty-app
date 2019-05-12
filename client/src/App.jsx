@@ -20,8 +20,8 @@ class App extends Component {
 
   addMessages(messages){
     const messageStr = JSON.stringify({
+      type: 'postMessage',
       data: {
-        type: 'postMessage',
         messages
       }
     });
@@ -35,17 +35,15 @@ class App extends Component {
     }
 
     const data = {
-      type: 'postNotification',
       content: `${name} has changed their name to ${user.name}`,
       currentUser: user
     }
 
     this.setState({ currentUser: user });
-    const messageStr = JSON.stringify({ data });
+    const messageStr = JSON.stringify({ type: 'postNotification', data });
     this.socket.send(messageStr);
   }
 
-  // in App.jsx
   componentDidMount() {
     //create a new socket connection
     this.socket = new WebSocket('ws://localhost:3001/');

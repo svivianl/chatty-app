@@ -1,20 +1,18 @@
 import React, {Component} from 'react';
 import { getStyle } from '../helpers/index.js';
 
-class ImgMessage extends Component {
-  render() {
-    const style = getStyle( this.props.users, this.props.message );
-    const addUsername = style && (
-      <span className='message-username' style={style}>{this.props.message.username}</span>);
+const ImgMessage = ({ users, message }) => {
+  const style = getStyle( users, message );
+  const addUsername = style && (
+    <span className='message-username' style={style}>{message.username}</span>);
 
-    return (
-      <div className='message'>
-        {addUsername}
-        <div>
-          <img className='message-content' src={this.props.message.content}/>
-        </div>
+  return (
+    <div className='message'>
+      {addUsername}
+      <div>
+        <img className='message-content' src={message.content}/>
       </div>
-    );
-  }
+    </div>
+  );
 }
 export default ImgMessage;

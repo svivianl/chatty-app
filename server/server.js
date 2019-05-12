@@ -36,10 +36,10 @@ const wss = new SocketServer({ server });
 //====================================================================
 
 // Broadcast to all.
-wss.broadcast = function broadcast(data) {
+wss.broadcast = function broadcast(message) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
+      client.send(message);
     }
   });
 };
@@ -76,25 +76,25 @@ wss.on('connection', (ws, req) => {
     }
   }));
 
-  ws.on('message', function incoming(message) {
+  ws.on('message', function incoming(incomingMessage) {
 
-    const { data } = JSON.parse(message);
+    const { type, data } = JSON.parse(incomingMessage);
 
-    switch(data.type){
+    switch(type){
       case 'postMessage':
         const newMessages = [];
-        data.messages.forEach(message => {
-          message['id'] = uuidv1();
-          switch(message.type){
+        data.messages.forEach(currentMessage => {
+          currentMessage['id'] = uuidv1();
+          switch(currentMessage.type){
             case 'postMessage':
-              message.type = 'incomingMessage';
+              currentMessage.type = 'incomingMessage';
               break;
             case 'postMessageImg':
-              message.type = 'incomingMessageImg';
+              currentMessage.type = 'incomingMessageImg';
               break;
           }
-          messages.push(message);
-          newMessages.push(message);
+          messages.push(currentMessage);
+          newMessages.push(currentMessage);
         });
         wss.broadcast(JSON.stringify({ type: 'message', data: newMessages }));
         break;
