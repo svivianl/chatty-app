@@ -66,11 +66,9 @@ Chatty React App: http://localhost:3000
 
 ## Features
 
-* Change user's name when they press TAB.
 * Connect to a real DB.
 * Deploy
 
 ## Known issues
 
-* You **must** change username Anonymous for another one before starting. And you **must** press ENTER every time you change the user's name.
 * You can have only 4 people using the chat page because there are only 4 colours to assign to each user.
