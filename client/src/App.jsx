@@ -5,13 +5,13 @@ import ChatBar from './ChatBar.jsx';
 
 class App extends Component {
   constructor(props){
-    super(props);
+    super();
 
     this.state = {
       currentUser: {name:'Anonymous'},
       messages: [],
       users: [],
-      numberOfUsers: 1
+      numberOfUsers: 0
     };
 
     this.addMessages = this.addMessages.bind(this);
@@ -30,7 +30,7 @@ class App extends Component {
 
   changeUser(user){
     let name = '';
-    if(this.state.currentUser.name.length !== 0) {
+    if(this.state.currentUser.name.length) {
       name = this.state.currentUser.name[this.state.currentUser.name.length - 1];
     }
 
@@ -66,7 +66,7 @@ class App extends Component {
           }
 
           let loading = true;
-          if(data.messages.length !== 0) loading = false;
+          if(data.messages.length) loading = false;
 
           this.setState({
             currentUser: currentUser,
@@ -119,7 +119,7 @@ class App extends Component {
   render() {
     let  main = null;
 
-    if(this.state.messages.length !== 0) main = <MessageList users={this.state.users} messages={this.state.messages}/>;
+    if(this.state.messages.length) main = <MessageList users={this.state.users} messages={this.state.messages}/>;
 
     return (
       <div>

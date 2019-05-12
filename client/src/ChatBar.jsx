@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-const isImageURL = (word) => /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(word);
+// check if the message has an image URL
+const isImageURL = (message) => /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(message);
 
 class ChatBar extends Component {
   constructor(props){
@@ -22,8 +23,6 @@ class ChatBar extends Component {
         case 'message':
           const username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
           const messages = [];
-
-          let content = null;
 
           // split message into messages
           if(isImageURL(e.target.value)){
@@ -75,7 +74,7 @@ class ChatBar extends Component {
 
   render() {
     let username = this.props.currentUser.name;
-    if(this.props.currentUser.name !== undefined && Array.isArray(this.props.currentUser.name) && this.props.currentUser.name.length > 0) username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
+    if(this.props.currentUser.name && Array.isArray(this.props.currentUser.name) && this.props.currentUser.name.length) username = this.props.currentUser.name[this.props.currentUser.name.length - 1];
     return (
       <footer className="chatbar">
         <input className="chatbar-username"

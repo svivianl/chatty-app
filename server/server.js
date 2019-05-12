@@ -27,7 +27,7 @@ const { messages, users } = require( './model/index.js' );
 // Array with some colors
 var colors = [ 'red', 'green', 'blue', 'magenta' ];
 // ... in random order
-colors.sort(function(a,b) { return Math.random() > 0.5; } );
+colors.sort((a,b) => Math.random() > 0.5 );
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
@@ -76,12 +76,6 @@ wss.on('connection', (ws, req) => {
     }
   }));
 
-  // const ip = req.connection.remoteAddress;
-
-  // ws.on('open', function open() {
-  //   ws.send(JSON.stringify({ type: 'message', data: messages }));
-  // });
-
   ws.on('message', function incoming(message) {
 
     const { data } = JSON.parse(message);
@@ -89,7 +83,6 @@ wss.on('connection', (ws, req) => {
     switch(data.type){
       case 'postMessage':
         const newMessages = [];
-        // data.type = 'incomingMessage';
         data.messages.forEach(message => {
           message['id'] = uuidv1();
           switch(message.type){
@@ -115,8 +108,6 @@ wss.on('connection', (ws, req) => {
         messages.push(message);
 
         user.name.push(data.currentUser.name);
-        const index = users.findIndex(user => user.id === data.currentUser.id);
-        // users[index].name.push(data.currentUser.name);
         wss.broadcast(JSON.stringify({ type: 'notification', data: {message, users} }));
 
         ws.send(JSON.stringify({
