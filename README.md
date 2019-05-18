@@ -4,6 +4,7 @@ Chatty is a simple, single-page Chat page built using:
 
 **Front-end:**
 * HTML, CSS, React
+
 **Back-end:**
 * Node, Express and WebSockets
 
